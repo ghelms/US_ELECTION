@@ -3,21 +3,21 @@ from wordcloud import WordCloud, STOPWORDS
 from varname import nameof
 
 # Importing full dataset for donald trump
-df_donald = pd.read_csv("hashtag_donaldtrump.csv",
+df_donald = pd.read_csv("donald_with_sentiment.csv",
                         lineterminator='\n',
                         parse_dates=True)
 # Subsetting the data
-columns_of_interest = ["created_at", "tweet", "likes", "retweet_count", "user_join_date", "user_followers_count", "state"]
-df_donald = df_donald[columns_of_interest].iloc[0:2000]
+#columns_of_interest = ["created_at", "tweet", "likes", "retweet_count", "user_join_date", "user_followers_count", "state"]
+#df_donald = df_donald[columns_of_interest].iloc[0:2000]
 
 
 # Importing data from Biden
-df_biden = pd.read_csv("hashtag_joebiden.csv",
+df_biden = pd.read_csv("joe_with_sentiment.csv",
                         lineterminator='\n',
                         parse_dates=True)
 
 # Subsetting Biden data
-df_biden = df_biden[columns_of_interest].iloc[0:2000]
+#df_biden = df_biden[columns_of_interest].iloc[0:2000]
 
 # Making a string with the tweets
 tweets_donald = "".join(df_donald['tweet'].tolist())
@@ -42,7 +42,7 @@ def wordclouder(text, filename):
 
 #Using the function
 wordclouder(tweets_donald, "Wordcloud_Trump")
-wordclouder(tweets_biden, "Wordcloud_Donald")
+wordclouder(tweets_biden, "Wordcloud_Biden")
 
 
 
