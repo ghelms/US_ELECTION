@@ -69,7 +69,7 @@ data = {'state': states,
 # Converting it to a data frame
 df_results = pd.DataFrame(data)
 
-# Merging the result to the data frame
+# Merging the result to the data frame and filtering all data with no state out
 df = pd.merge(df_both, df_results, how = "outer", on= "state")
 
 
