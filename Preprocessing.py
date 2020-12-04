@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import re
+import math
 
 # Importing the original data
 df_donald = pd.read_csv("donald_with_sentiment.csv",
@@ -39,6 +41,11 @@ election_date = pd.to_datetime('2020-11-03')
 df_both['days_since_user_creation'] = election_date - df_both['user_join_date']
 df_both['days_since_user_creation'] = df_both['days_since_user_creation'] / np.timedelta64(1, 'D')
 
+# Create column days before election
+df_both['days_before_election'] = election_date - df_both['created_at']
+df_both['days_before_election'] = df_both['days_before_election'] / np.timedelta64(1, 'D')
+df_both['days_before_election'] = [round(number) for number in df_both['days_before_election']] # Rounding to next whole integer
+
 # create column indicating which year-month the account was created
 df_both["account_year_month"] = df_both["user_join_date"].dt.strftime('%Y-%m')
 
@@ -74,4 +81,5 @@ df = pd.merge(df_both, df_results, how = "outer", on= "state")
 
 
 # Exporting to csv file
-df.to_csv("./FINAL_DATA.csv")
+df.to_csv("./FINAL_DATA.csv", index = False)
+df_hep = pd.read_csv("FINAL_DATA.csv", index_col=[0])
