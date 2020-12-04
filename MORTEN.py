@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colors
 from matplotlib.ticker import PercentFormatter
+import plotly.express as px
+import plotly.graph_objects as go
 
 # load csv files
 df_donald = pd.read_csv("donald_with_sentiment.csv", lineterminator="\n", parse_dates=True)  # read donald csv file
@@ -80,19 +82,11 @@ user_creation = both_small.groupby(['account_year_month']).size().reset_index(na
 usa_both = both_small.loc[both_small['country'] == 'United States of America'].dropna(
     subset=['state'])
 
-usa_joe
-
-usa_donald
-
 
 
 
 # create some visualization
 
-fig, ax = plt.subplots()
-ax.plot('account_year_month', 'counts', data=user_creation)
-plt.show()
-plt.clf()
 
 # convert date columns to correct object type
 
@@ -119,7 +113,7 @@ states_sent = pd.DataFrame({'state': joe_states_mean['state'],
                             'biden': joe_states_mean['sentiment'],
                             'trump': don_states_mean['sentiment']})
 
-plt.plot(states_sent['state'], states_sent['biden'], label='Biden')
+plt.plot(states_sent['state'], states_sent['biden'], label='Biden', )
 plt.plot(states_sent['state'], states_sent['trump'], label='Trump')
 plt.ylabel('sentiment')
 plt.xticks(rotation=90)
@@ -137,33 +131,72 @@ plt.clf()
 
 # does time since joining twitter predict sentiment analysis (x-axis: how long on twitter, y-axis: sentiment score)
 
+############################ TWEETS PER STATE ######################################
 
 import plotly.express as px
-
-fig = px.choropleth(locationmode="USA-states", color=[1,2,3], scope="usa")
-fig.show()
-
-
 import plotly.graph_objects as go
 
-import pandas as pd
-df = pd.read_csv('2011_us_ag_exports.csv')
+tweets_per_state = df.groupby(['code']).size().reset_index(name='counts').sort_values(by=['counts'], ascending=False)
 
 fig = go.Figure(data=go.Choropleth(
-    locations=df['code'], # Spatial coordinates
-    z = df['total exports'].astype(float), # Data to be color-coded
+    locations=tweets_per_state['code'], # Spatial coordinates
+    z = tweets_per_state['counts'].astype(float), # Data to be color-coded
     locationmode = 'USA-states', # set of locations match entries in `locations`
     colorscale = 'Reds',
-    colorbar_title = "Millions USD",
+    colorbar_title = "Tweets",
 ))
 
 fig.update_layout(
-    title_text = '2011 US Agriculture Exports by State',
+    title_text = '2020 US Election Tweets per State',
     geo_scope='usa', # limite map scope to USA
 )
 
 fig.show()
 
-dict = {'code' : df['code'], 'state' : df['state']}
+##################### SENTIMENT PER STATE ##############################
 
-df_state_code = pd.DataFrame(dict)
+df['abs_sentiment'] = abs(df['sentiment'])
+
+abs_sentiment_per_state = df.groupby('code')['abs_sentiment'].mean().reset_index()
+
+fig = go.Figure(data=go.Choropleth(
+    locations=abs_sentiment_per_state['code'], # Spatial coordinates
+    z = abs_sentiment_per_state['abs_sentiment'].astype(float), # Data to be color-coded
+    locationmode = 'USA-states', # set of locations match entries in `locations`
+    colorscale = 'Reds',
+    colorbar_title = "Tweets",
+))
+
+fig.update_layout(
+    title_text = '2020 US Election Sentiment per State',
+    geo_scope='usa', # limite map scope to USA
+)
+
+fig.show()
+
+
+################### DEMOCRATIC STATES ARE MORE PRO BIDEN #######################
+
+democratic = df.loc[df['Result'] == 'Biden']
+
+demo_grouped = democratic.groupby(['Hashtag', 'code'])['sentiment'].mean().reset_index()
+
+demo_grouped_trump = demo_grouped.loc[demo_grouped['Hashtag'] == 'DonaldTrump']
+demo_grouped_biden = demo_grouped.loc[demo_grouped['Hashtag'] == 'JoeBiden']
+
+
+plt.plot(demo_grouped_trump['code'], demo_grouped_trump['sentiment'], 'r+', label='Trump', linestyle = 'solid', linewidth = 2)
+plt.plot(demo_grouped_biden['code'], demo_grouped_biden['sentiment'], 'bo', label='Biden', linestyle = 'solid', linewidth = 2)
+plt.ylabel('sentiment')
+plt.xticks(rotation=90)
+plt.savefig('./plots/democratic_states.png')
+
+################### MORE USERS AS ELECTION DAY APPROACHES #####################
+
+
+
+fig, ax = plt.subplots()
+ax.plot('days_since_creation', 'counts', data=dataframe)
+plt.show()
+plt.clf()
+
