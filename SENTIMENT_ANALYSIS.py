@@ -20,6 +20,7 @@ df_joe = pd.read_csv("hashtag_joebiden.csv",
 # Subsetting the data
 columns_of_interest = ["created_at", "tweet", "likes", "retweet_count", "user_join_date", "user_followers_count", "state"]
 df_donald = df_donald[columns_of_interest].iloc[0:2000]
+df_joe = df_joe[columns_of_interest].iloc[0:2000]
 
 # Function for cleaning the data
 def clean_tweets(text):
