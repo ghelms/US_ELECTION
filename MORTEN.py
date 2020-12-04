@@ -19,11 +19,6 @@ donald_small = df_donald.dropna(subset=['country', 'tweet']).iloc[0:10000]
 joe_small = df_joe.dropna(subset=['country', 'tweet']).iloc[0:10000]
 both_small = df_both.dropna(subset=['country', 'tweet']).iloc[0:10000]
 
-# number of rows
-
-# number of tweets for joe/donald and in total
-
-
 # group by country and count number of tweets
 country_both = both_small.groupby(['country']).size().reset_index(name='counts').sort_values(by=['counts'],
                                                                                              ascending=False)
@@ -80,6 +75,18 @@ daily_tweeting = both_small.groupby(['day_tweeted']).size().reset_index(name='co
 both_small["account_year_month"] = both_small["user_join_date"].dt.strftime('%Y-%m')
 user_creation = both_small.groupby(['account_year_month']).size().reset_index(name='counts')
 
+# selecting only US tweets and dropping rows where state is na
+
+usa_both = both_small.loc[both_small['country'] == 'United States of America'].dropna(
+    subset=['state'])
+
+usa_joe
+
+usa_donald
+
+
+
+
 # create some visualization
 
 fig, ax = plt.subplots()
@@ -97,11 +104,7 @@ plt.clf()
 # sentiment analysis
 
 
-sentiment_joe_small = sentiment_joe.loc[sentiment_joe['country'] == 'United States of America'].dropna(
-    subset=['state']).iloc[0:10000]
-sent_joe_small1 = sentiment_joe_small[
-    ['created_at', 'likes', 'retweet_count', 'source', 'user_join_date', 'user_followers_count', 'state', 'sentiment',
-     'sentiment_overall']]
+
 
 states = set(sent_don_small1['state'])
 states.remove('District of Columbia')
@@ -133,3 +136,34 @@ plt.clf()
 # data visualization with ggplot or other packages
 
 # does time since joining twitter predict sentiment analysis (x-axis: how long on twitter, y-axis: sentiment score)
+
+
+import plotly.express as px
+
+fig = px.choropleth(locationmode="USA-states", color=[1,2,3], scope="usa")
+fig.show()
+
+
+import plotly.graph_objects as go
+
+import pandas as pd
+df = pd.read_csv('2011_us_ag_exports.csv')
+
+fig = go.Figure(data=go.Choropleth(
+    locations=df['code'], # Spatial coordinates
+    z = df['total exports'].astype(float), # Data to be color-coded
+    locationmode = 'USA-states', # set of locations match entries in `locations`
+    colorscale = 'Reds',
+    colorbar_title = "Millions USD",
+))
+
+fig.update_layout(
+    title_text = '2011 US Agriculture Exports by State',
+    geo_scope='usa', # limite map scope to USA
+)
+
+fig.show()
+
+dict = {'code' : df['code'], 'state' : df['state']}
+
+df_state_code = pd.DataFrame(dict)
