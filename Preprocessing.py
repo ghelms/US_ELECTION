@@ -56,9 +56,14 @@ result = ["Donald", "Donald", "Biden", "Donald", "Biden", "Biden", "Biden", "Bid
           "Biden", "Donald", "Donald", "Donald", "Donald", "Biden", "Biden", "Biden", "Biden", "Biden", "Donald",
           "Donald", "Donald", "Donald", "Biden", "Biden", "Biden", "Donald", "Donald", "Donald", "Donald", "Donald",
           "Biden", "Biden", "Biden", "Donald", "Biden", "Donald"]
+code = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
+        'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
+        'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+
 
 # Creating a dictionaire with the voting results
 data = {'state': states,
+        'code': code,
         'Result': result}
 
 # Converting it to a data frame
@@ -66,6 +71,7 @@ df_results = pd.DataFrame(data)
 
 # Merging the result to the data frame
 df = pd.merge(df_both, df_results, how = "outer", on= "state")
+
 
 # Exporting to csv file
 df.to_csv("./FINAL_DATA.csv")
