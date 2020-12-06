@@ -141,4 +141,36 @@ plt.title('Mean Absolute Sentiment per Hashtag')
 plt.show()
 plt.clf()
 
+#################### NEW USERS SENTIMENT ######################
 
+df['days_since_user_creation'] = df['created_at'] - df['user_join_date']
+df['days_since_user_creation'] = df['days_since_user_creation'] / np.timedelta64(1, 'D')
+
+# filtering out only tweets created by accounts that are less than a day old
+new_users = df.loc[df['days_since_user_creation'] < 1]
+
+# plotting the difference
+means = [new_users['abs_sentiment'].mean(), df['abs_sentiment'].mean()]
+
+# Creating the plot
+ind = np.arange(2)
+plt.bar(ind, means, color = ['red', 'blue'], width = 0.5)
+plt.xticks(ind, ['New Users','Overall'])
+plt.ylabel('Absolute Sentiment')
+plt.title('Absolute Sentiment by Account Creation')
+plt.show()
+plt.clf()
+
+########################## HOURLY AND DAILY TWEETING
+
+daily_tweeting = df.groupby(['day_tweeted']).size().reset_index(name='counts')
+
+# Making the plot
+fig, ax = plt.subplots()
+ax.plot(daily_tweeting['day_tweeted'], daily_tweeting['counts'])
+ax.set_ylabel('Frequency')
+ax.set_title('Tweets per Day')
+plt.xticks(rotation=90)
+
+plt.show()
+plt.clf()

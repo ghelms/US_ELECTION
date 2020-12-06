@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import psutil
 from matplotlib import colors
 from matplotlib.ticker import PercentFormatter
 import plotly.express as px
@@ -214,7 +215,7 @@ ax.set_title('Mean Sentiment in Democratic States')
 fig.tight_layout()
 plt.savefig('./plots/democratic_states_barplot.png')
 
-################### MORE USERS AS ELECTION DAY APPROACHES #####################
+################### SENTIMENT WHEN ELECTION APPROACHES #####################
 
 df['days_before_election'] = election_date - df['created_at']
 df['days_before_election'] = df['days_before_election'] / np.timedelta64(1, 'D')
@@ -240,5 +241,15 @@ plt.title('Mean Absolute Sentiment per Hashtag')
 
 plt.savefig('./plots/sentiment_per_hashtag.png')
 
-############################### OTHER PLOTS #####################################
+############################### OVERALL SENTIMENT BAR PLOT #####################################
+
+grouped_by_overall_sentiment = df.groupby('sentiment_overall').size().reset_index(name='counts').sort_values(by=['counts'], ascending=False)
+
+ind_3 = np.arange(3)
+plt.bar(ind_3, grouped_by_overall_sentiment['counts'], color = ['red', 'salmon', 'green'], width = 0.5)
+plt.xticks(ind_3, grouped_by_overall_sentiment['sentiment_overall'])
+
+
+plt.show()
+plt.clf()
 

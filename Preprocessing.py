@@ -37,11 +37,10 @@ def get_tweets():
 
     # create columns for day_tweeted and hour_tweeted
     df_both['day_tweeted'] = df_both['created_at'].dt.strftime('%Y-%m-%d')
-    df_both['hour_tweeted'] = df_both['created_at'].dt.strftime('%Y-%m-%d %H' + ":00")
 
     # create column for days since user creation
     election_date = pd.to_datetime('2020-11-03')
-    df_both['days_since_user_creation'] = election_date - df_both['user_join_date']
+    df_both['days_since_user_creation'] = df_both['created_at'] - df_both['user_join_date']
     df_both['days_since_user_creation'] = df_both['days_since_user_creation'] / np.timedelta64(1, 'D')
 
     # Create column days before election
