@@ -17,10 +17,6 @@ df_joe = pd.read_csv("hashtag_joebiden.csv",
                         parse_dates=True)
 
 
-# Subsetting the data
-columns_of_interest = ["created_at", "tweet", "likes", "retweet_count", "user_join_date", "user_followers_count", "state"]
-df_donald = df_donald[columns_of_interest].iloc[0:2000]
-df_joe = df_joe[columns_of_interest].iloc[0:2000]
 
 # Function for cleaning the data
 def clean_tweets(text):
@@ -34,6 +30,16 @@ def clean_tweets(text):
 # Cleaning the tweets by using the apply function
 df_donald['tweet'] = df_donald['tweet'].apply(lambda x: clean_tweets(x))
 df_joe['tweet'] = df_joe['tweet'].apply(lambda x: clean_tweets(x))
+
+############# EXAMPLE ############
+#### TWEET BEFORE TOKENIZING
+# @CLady62 Her 15 minutes were over long time ago. Omarosa never represented the black community! #TheReidOut \n\nShe
+# cried to #Trump begging for a job!'
+
+#### TWEET AFTER TOKENIZING
+# Her 15 minutes were over long time ago. Omarosa never represented the black community!  TheReidOut   She cried to
+# Trump begging for a job!
+
 
 # Using VADER to get sentiment scores. The output is a dictionaire. Indexing to only get the final score
 df_donald["sentiment_dic"] = df_donald['tweet'].apply(lambda x: sid.polarity_scores(x))

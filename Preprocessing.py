@@ -1,4 +1,4 @@
-# Defining a function for preprocessing the data
+# Defining a function for preprocessing the
 def get_tweets():
     # Importing the modules needed
     import pandas as pd
@@ -56,14 +56,12 @@ def get_tweets():
 
     # Listing all the states and the voting result of that state
     states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
-              "Florida",
-              "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine",
-              "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska",
-              "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota",
-              "Ohio",
-              "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
-              "Texas",
-              "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+              "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+              "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana",
+              "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina",
+              "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+              "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+              "Wisconsin", "Wyoming"]
     result = ["Donald", "Donald", "Biden", "Donald", "Biden", "Biden", "Biden", "Biden", "Donald", "Biden", "Biden",
               "Donald", "Biden", "Donald", "Donald", "Donald", "Donald", "Donald", "Biden", "Biden", "Biden", "Biden",
               "Biden", "Donald", "Donald", "Donald", "Donald", "Biden", "Biden", "Biden", "Biden", "Biden", "Donald",
