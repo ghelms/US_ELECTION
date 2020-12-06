@@ -191,12 +191,54 @@ plt.ylabel('sentiment')
 plt.xticks(rotation=90)
 plt.savefig('./plots/democratic_states.png')
 
-################### MORE USERS AS ELECTION DAY APPROACHES #####################
+################### BAR PLOT ###########3#############
 
+unique_demstates = demo_grouped.code.unique()
 
+state_codes = np.arange(len(unique_demstates))
+width = 0.30
 
 fig, ax = plt.subplots()
-ax.plot('days_since_creation', 'counts', data=dataframe)
+
+trump = ax.bar(state_codes - width/2, demo_grouped_trump['sentiment'], color = 'red', width = width, label = 'Trump')
+biden = ax.bar(state_codes + width/2, demo_grouped_biden['sentiment'], color = 'blue', width = width, label = 'Biden')
+
+ax.set_xticks(state_codes)
+ax.set_xticklabels(demo_grouped_trump['code'])
+ax.legend()
+
+plt.xticks(rotation=90)
+
+ax.set_ylabel('Sentiment')
+ax.set_title('Mean Sentiment in Democratic States')
+fig.tight_layout()
+plt.savefig('./plots/democratic_states_barplot.png')
+
+################### MORE USERS AS ELECTION DAY APPROACHES #####################
+
+df['days_before_election'] = election_date - df['created_at']
+df['days_before_election'] = df['days_before_election'] / np.timedelta64(1, 'D')
+df['days_before_election'] = [round(number) for number in df['days_before_election']]
+
+days = df.groupby('days_before_election')['abs_sentiment'].mean().reset_index()
+
+fig, ax = plt.subplots()
+ax.plot('days_before_election', 'abs_sentiment', data=days)
 plt.show()
 plt.clf()
+
+################## TRUMP TWEETS MORE VALENCED THAN BIDEN TWEETS ###########################
+
+grouped_by_hashtag = df.groupby('Hashtag')['abs_sentiment'].mean().reset_index()
+
+ind = np.arange(2)
+p1 = plt.bar(ind, grouped_by_hashtag['abs_sentiment'], color = ['red', 'blue'], width = 0.5)
+plt.xticks(ind, grouped_by_hashtag['Hashtag'])
+
+plt.ylabel('Sentiment')
+plt.title('Mean Absolute Sentiment per Hashtag')
+
+plt.savefig('./plots/sentiment_per_hashtag.png')
+
+############################### OTHER PLOTS #####################################
 
