@@ -161,7 +161,7 @@ plt.title('Absolute Sentiment by Account Creation')
 plt.show()
 plt.clf()
 
-########################## HOURLY AND DAILY TWEETING
+########################## DAILY TWEETING ###########################
 
 daily_tweeting = df.groupby(['day_tweeted']).size().reset_index(name='counts')
 
@@ -173,4 +173,5 @@ ax.set_title('Tweets per Day')
 plt.xticks(rotation=90)
 
 plt.show()
-plt.clf()
+
+
