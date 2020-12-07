@@ -7,6 +7,75 @@ from Preprocessing import get_tweets
 # Importing the tweets
 df = get_tweets()
 
+################## TRUMP TWEETS MORE VALENCED THAN BIDEN TWEETS? ###########################
+
+# Grouping tweets by hashtag and getting the mean absolute valence
+grouped_by_hashtag = df.groupby('Hashtag')['abs_sentiment'].mean().reset_index()
+
+# Creating the plot
+ind = np.arange(2)
+p1 = plt.bar(ind, grouped_by_hashtag['abs_sentiment'], color = ['red', 'blue'], width = 0.5)
+plt.xticks(ind, grouped_by_hashtag['Hashtag'])
+plt.ylabel('Sentiment')
+plt.title('Mean Absolute Sentiment per Hashtag')
+
+plt.show()
+plt.clf()
+
+##################### NEGATIVE PROPORTION PER STATE ##############################
+
+# Grouping by state code and counting the number of tweets within each state
+tweets_per_state = df.groupby(['code']).size().reset_index(name='counts').sort_values(by=['counts'], ascending=False)
+
+#Getting the amount of negative tweets
+negative_per_state = df.groupby(['code', 'sentiment_overall']).size().reset_index(name='counts').sort_values(by=['counts'], ascending=False)
+# Filtering out all negative tweets
+df_negative = negative_per_state.loc[negative_per_state['sentiment_overall'] == 'Negative']
+
+# Merging the two dataframes
+df_hep = pd.merge(tweets_per_state, df_negative, on="code")
+
+# Creating a proportion of negative tweets variable
+df_hep['prop_negative'] = df_hep['counts_y']/df_hep['counts_x']
+
+# Doing the plotly magic
+fig = go.Figure(data=go.Choropleth(
+    locations=df_hep['code'], # Spatial coordinates
+    z = df_hep['prop_negative'].astype(float), # Data to be color-coded
+    locationmode = 'USA-states', # set of locations match entries in `locations`
+    colorscale = 'Reds',
+    colorbar_title = "Proportion of Negative Tweets",
+))
+
+# Making labels
+fig.update_layout(
+    title_text = '2020 US Election Negative proportion of tweets per State',
+    geo_scope='usa', # limite map scope to USA
+)
+
+fig.show()
+
+################### SENTIMENT AS ELECTION DAY APPROACHES #####################
+
+# Grouping by days before election
+days = df.groupby('days_before_election')['abs_sentiment'].mean().reset_index()
+
+# Making the plot
+fig, ax = plt.subplots()
+ax.plot('days_before_election', 'abs_sentiment', data=days)
+ax.set_ylabel('Sentiment')
+ax.set_title('The sentiment as election day approaches')
+
+plt.show()
+plt.savefig("./plots/sentiment_as_election_day_approaches")
+plt.clf()
+
+
+
+
+
+############################# OTHER PLOTS ! ################################
+
 ############################ TWEETS PER STATE ######################################
 
 # Grouping by state code and counting the number of tweets within each state
@@ -111,35 +180,6 @@ fig.tight_layout()
 plt.show()
 plt.clf()
 
-################### SENTIMENT AS ELECTION DAY APPROACHES #####################
-
-# Grouping by days before election
-days = df.groupby('days_before_election')['abs_sentiment'].mean().reset_index()
-
-# Making the plot
-fig, ax = plt.subplots()
-ax.plot('days_before_election', 'abs_sentiment', data=days)
-ax.set_ylabel('Sentiment')
-ax.set_title('The sentiment as election day approaches')
-
-plt.show()
-plt.savefig("./plots/sentiment_as_election_day_approaches")
-plt.clf()
-
-################## TRUMP TWEETS MORE VALENCED THAN BIDEN TWEETS? ###########################
-
-# Grouping tweets by hashtag and getting the mean absolute valence
-grouped_by_hashtag = df.groupby('Hashtag')['abs_sentiment'].mean().reset_index()
-
-# Creating the plot
-ind = np.arange(2)
-p1 = plt.bar(ind, grouped_by_hashtag['abs_sentiment'], color = ['red', 'blue'], width = 0.5)
-plt.xticks(ind, grouped_by_hashtag['Hashtag'])
-plt.ylabel('Sentiment')
-plt.title('Mean Absolute Sentiment per Hashtag')
-
-plt.show()
-plt.clf()
 
 #################### NEW USERS SENTIMENT ######################
 
@@ -173,5 +213,6 @@ ax.set_title('Tweets per Day')
 plt.xticks(rotation=90)
 
 plt.show()
+
 
 
