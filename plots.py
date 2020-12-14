@@ -57,21 +57,20 @@ fig.show()
 
 ################### SENTIMENT AS ELECTION DAY APPROACHES #####################
 
+
 # Grouping by days before election
 days = df.groupby('days_before_election')['abs_sentiment'].mean().reset_index()
 
 # Making the plot
 fig, ax = plt.subplots()
-ax.plot('days_before_election', 'abs_sentiment', data=days)
+ax.plot('days_before_election', 'abs_sentiment', marker='o',data=days)
 ax.set_ylabel('Sentiment')
+ax.set_xlabel('Days Before Election')
 ax.set_title('The sentiment as election day approaches')
 
 plt.show()
 plt.savefig("./plots/sentiment_as_election_day_approaches")
 plt.clf()
-
-
-
 
 
 ############################# OTHER PLOTS ! ################################
