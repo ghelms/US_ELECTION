@@ -213,6 +213,3 @@ ax.set_title('Tweets per Day')
 plt.xticks(rotation=90)
 
 plt.show()
-
-
-
